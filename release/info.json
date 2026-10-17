@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 3,
+  "title": "Pocket Rocket",
+  "description": "1-bit rocket lander. 100 levels across 10 cities and places. Land slow and straight on the pad, chase hidden bonuses.",
+  "author": "jaychugstein",
+  "version": "1.0.0",
+  "date": "2026-10-17",
+  "genre": "Action",
+  "license": "MIT",
+  "binaries": [
+    {
+      "title": "Pocket Rocket",
+      "filename": "PocketRocket.hex",
+      "device": "ArduboyFX",
+      "flashdata": "PocketRocket-fxdata.bin",
+      "titleimage": "title.png"
+    }
+  ],
+  "sourceUrl": "https://github.com/jaychugstein/Pocket-Rocket"
+}
