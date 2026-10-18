@@ -11,7 +11,7 @@ uint8_t HOST_BTN=0,HOST_PREV=0;uint8_t*HOST_FX;uint8_t Arduboy2Base_sb[1024];
 uint8_t Arduboy2Base::sBuffer[1024];
 #define setup game_setup
 #define loop game_loop
-#include "../PocketRocket/PocketRocket.ino"
+#include "../PocketRocket/game.cpp"
 #undef setup
 #undef loop
 struct AI{double AK,AV,GL;int AD;double crz;std::vector<std::pair<double,double>> wp;};

@@ -19,8 +19,7 @@ for f in $CORE/*.cpp; do avr-g++ $CXF $DEFS $INC -c $f -o $B/core/$(basename $f)
 for f in $CORE/*.S; do avr-gcc -x assembler-with-cpp -flto $DEFS $INC -c $f -o $B/core/$(basename $f).o; done
 for f in $A2/*.cpp $FX/*.cpp; do avr-g++ $CXF $DEFS $INC -c $f -o $B/lib/$(basename $f).o; done
 avr-gcc-ar rcs $B/core.a $B/core/*.o
-cp $SK/$SK.ino $B/sketch.cpp; sed -i '1i #include <Arduino.h>' $B/sketch.cpp
-avr-g++ $CXF $DEFS $INC -c $B/sketch.cpp -o $B/sketch.o
+avr-g++ $CXF $DEFS $INC -c $SK/game.cpp -o $B/sketch.o
 avr-gcc -w -Os -flto -fuse-linker-plugin -Wl,--gc-sections -mcall-prologues -mrelax -mmcu=atmega32u4 -o $B/$SK.elf $B/sketch.o $B/lib/*.o $B/core.a -lm
 avr-objcopy -O ihex -R .eeprom $B/$SK.elf $B/$SK.hex
 avr-size -A $B/$SK.elf | awk '/^.text|^.data|^.bss/{s[$1]=$2} END{printf "FLASH %d / 28672   RAM %d / 2560\n", s[".text"]+s[".data"], s[".data"]+s[".bss"]}'

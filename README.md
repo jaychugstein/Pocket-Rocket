@@ -62,7 +62,7 @@ This regenerates everything in `PocketRocket/fxdata/` plus `fxdata.h` and `scree
 
 ## Porting (POOM and other Arduboy-compatible devices)
 
-* All game logic is in `PocketRocket/PocketRocket.ino` and only uses `Arduboy2Base`
+* All game logic is in `PocketRocket/game.cpp` and only uses `Arduboy2Base`
   (buttons, frame timing, `sBuffer`), `ArduboyFX` (`FX::begin`, `FX::readDataBytes`,
   `FX::seekData`, `FX::readPendingUInt8`, `FX::readEnd`, `FX::display`) and EEPROM.
 * `tools/hosttest.cpp` builds the unchanged game on a PC with small stand-ins in
