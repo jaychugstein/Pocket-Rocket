@@ -10,6 +10,8 @@ By **jaychugstein** · MIT License · Requires the FX flash chip (Arduboy FX / F
 
 ![](images/screenshot1.png) ![](images/screenshot4.png)
 
+**Included on the Arduboy FX cart** (BigFX list, Skill category).
+
 ## Controls
 
 | Button | Action |
