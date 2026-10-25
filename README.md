@@ -12,6 +12,8 @@ By **jaychugstein** · MIT License · Requires the FX flash chip (Arduboy FX / F
 
 **Included on the Arduboy FX cart** (BigFX list, Skill category).
 
+**[▶ Play it in your browser](https://jaychugstein.github.io/Pocket-Rocket/)** (works on phones too)
+
 ## Controls
 
 | Button | Action |
