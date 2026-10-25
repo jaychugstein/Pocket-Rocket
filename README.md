@@ -2,7 +2,7 @@
 
 ![Pocket Rocket](images/banner.png)
 
-A 1-bit rocket lander for the **Arduboy FX** (and FX-C). Fly a tiny rocket across
+A 1-bit rocket lander for the Poom, **Arduboy FX** (and FX-C). Fly a tiny rocket across
 100 levels in 10 cities and places — Seoul, Venezia, Giza, Paris, Lisboa, Sydney,
 Star Base, Siberia, Mariana and Rio — and set it down slow and straight on the pad.
 
