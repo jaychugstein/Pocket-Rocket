@@ -16,6 +16,8 @@ By **jaychugstein** · MIT License · Requires the FX flash chip (Arduboy FX / F
 
 ## Controls
 
+A is the outer button (labelled A on the POOM), B the inner one.
+
 | Button | Action |
 |---|---|
 | A (hold) | Thrust |

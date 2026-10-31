@@ -189,11 +189,11 @@ static void exPoint(uint8_t d,int16_t&ex,int16_t&ey){ex=rnd16(RX-(int32_t)d*S_*1
 static void simStep(){
  tick++;stepMovers();
  if(state==ST_LANDED||state==ST_CRASHED){if(sT<255)sT++;return;}
- bool A=ab.pressed(A_BUTTON)&&!aLock,Lb=ab.pressed(LEFT_BUTTON),Rb=ab.pressed(RIGHT_BUTTON);
+ bool A=ab.pressed(B_BUTTON)&&!aLock,Lb=ab.pressed(LEFT_BUTTON),Rb=ab.pressed(RIGHT_BUTTON);
  thr=A&&fuel>0&&!CH;
  if(state==ST_READY){if(fuel<=0){crash();return;}if(thr)state=ST_FLY;else return;}
  flyT++;
- if(ab.justPressed(B_BUTTON)&&!CH&&fuel<=0&&RY<0&&altM()>=100){CH=1;CHT=tick;int8_t sd=(rnd8()&1)?1:-1;VX+=sd*(int16_t)(FP(0.5)+((int16_t)rnd8()<<3));RA=sd*(15+rnd8()%11);}
+ if(ab.justPressed(A_BUTTON)&&!CH&&fuel<=0&&RY<0&&altM()>=100){CH=1;CHT=tick;int8_t sd=(rnd8()&1)?1:-1;VX+=sd*(int16_t)(FP(0.5)+((int16_t)rnd8()<<3));RA=sd*(15+rnd8()%11);}
  if(Lb)RA--;if(Rb)RA++;
  if(CH){if(RA>25)RA=25;if(RA<-25)RA=-25;}
  else{ int8_t da=(Rb?1:0)-(Lb?1:0);if(da){spin+=da;if(spin>=NA||spin<=-NA){spin=0;bonus+=69;popup(rnd16(RX),rnd16(RY)-6,1,69,48);if(++flips>=3&&!F3){F3=1;bonus+=1080;popup(rnd16(RX),rnd16(RY)-14,2,1080,70);}}}if(RA>NA/2)RA-=NA;else if(RA<-NA/2)RA+=NA;}
@@ -344,7 +344,7 @@ static uint32_t sp2(uint8_t b){uint32_t r=0;for(uint8_t i=0;i<5;i++)if(b&(1<<i))
 static void textS2(const char*s,int16_t x,int16_t y){for(;*s;s++,x+=8){for(int8_t k=-1;k<=6;k++){uint32_t m=0;for(int8_t d=-1;d<=1;d++){int8_t kk=k+d;if(kk>=0&&kk<6)m|=sp2(gcol(*s,kk>>1));}colBits(x+k,y-1,dil(m<<1),0);}for(int8_t k=0;k<6;k++)colBits(x+k,y,sp2(gcol(*s,k>>1)),1);}}
 void setup(){ab.boot();ab.display();FX::begin(FX_DATA_PAGE);ab.setFrameRate(60);uint32_t v=eeprom_read_dword(EE_ADDR)^0x5A5A0000UL;hi=(v<100000000UL)?(int32_t)v:0;}
 void loop(){if(!ab.nextFrame())return;ab.pollButtons();ft++;mt++;
- bool anyA=ab.pressed(A_BUTTON)||ab.pressed(B_BUTTON),jA=ab.justPressed(A_BUTTON)||ab.justPressed(B_BUTTON);
+ bool anyA=ab.pressed(B_BUTTON)||ab.pressed(A_BUTTON),jA=ab.justPressed(B_BUTTON)||ab.justPressed(A_BUTTON);
  switch(mode){
   case M_TITLE:if(anyA)HT+=27;else HT=HT>80?HT-80:0;
    if(HT>=2400){HT=0;lives=3;score=0;if(!howSeen){mode=M_HOWTO;mt=0;}else startLevel(0);}
@@ -353,7 +353,7 @@ void loop(){if(!ab.nextFrame())return;ab.pollButtons();ft++;mt++;
   case M_HOWTO:drawFrame(SQ_HOWTO,(mt>20&&!((mt>>4)&1))?1:0);if(mt>20&&jA){howSeen=true;startLevel(0);}break;
   case M_INTRO:drawFrame(INTROS[lvl/10],mt<60?mt/2:30+((mt-60)/2)%60);if(mt>14&&jA){mode=M_PLAY;aLock=true;ft=0;}break;
   case M_PLAY:
-   if(aLock){if(!ab.pressed(A_BUTTON))aLock=false;}
+   if(aLock){if(!ab.pressed(B_BUTTON))aLock=false;}
 #ifdef DBG
    if(state==ST_READY&&flyT==0){if(ab.justPressed(UP_BUTTON))startLevel((lvl+1)%100),mode=M_PLAY;if(ab.justPressed(DOWN_BUTTON))startLevel((lvl+99)%100),mode=M_PLAY;}
 #endif
@@ -362,9 +362,9 @@ void loop(){if(!ab.nextFrame())return;ab.pollButtons();ft++;mt++;
    if(state==ST_LANDED&&sT==1)saveHi();
    if(state==ST_CRASHED&&!lives&&sT>70){mode=M_OVER;mt=0;}
    else if(state==ST_LANDED&&lvl==99&&sT>40){mode=M_WIN;mt=0;}
-   else if((state==ST_CRASHED&&sT>70)||(state==ST_LANDED&&sT>40)){if(state==ST_LANDED&&ab.justPressed(B_BUTTON))detail=!detail;else if(ab.justPressed(A_BUTTON)){if(state==ST_LANDED)startLevel(lvl+1);else{resetLevel();aLock=true;}}}
+   else if((state==ST_CRASHED&&sT>70)||(state==ST_LANDED&&sT>40)){if(state==ST_LANDED&&ab.justPressed(A_BUTTON))detail=!detail;else if(ab.justPressed(B_BUTTON)){if(state==ST_LANDED)startLevel(lvl+1);else{resetLevel();aLock=true;}}}
    if(mode==M_PLAY)render();else render();break;
-  case M_OVER:drawFrame(SQ_OVER,mt<240?mt/2:60+((mt-240)/2)%60);tbs();tbP(PSTR("LEVEL "));tbn(lvl+1);tbP(PSTR("  SCORE "));tbn(score);ctb(18,1);if(mt>30&&ab.justPressed(A_BUTTON)){mode=M_TITLE;HT=0;}break;
-  case M_WIN:drawFrame(SQ_WIN,mt<240?mt/2:60+((mt-240)/2)%60);{tbs();tbn(score);int16_t sw=tl*8-2,x0=64-(19+5+sw)/2;char sc[12];memcpy(sc,tb,tl+1);tbs();tbP(PSTR("SCORE"));textO(tb,x0,38);textS2(sc,x0+24,35);}if(mt>30&&ab.justPressed(A_BUTTON)){mode=M_TITLE;HT=0;}break;
+  case M_OVER:drawFrame(SQ_OVER,mt<240?mt/2:60+((mt-240)/2)%60);tbs();tbP(PSTR("LEVEL "));tbn(lvl+1);tbP(PSTR("  SCORE "));tbn(score);ctb(18,1);if(mt>30&&ab.justPressed(B_BUTTON)){mode=M_TITLE;HT=0;}break;
+  case M_WIN:drawFrame(SQ_WIN,mt<240?mt/2:60+((mt-240)/2)%60);{tbs();tbn(score);int16_t sw=tl*8-2,x0=64-(19+5+sw)/2;char sc[12];memcpy(sc,tb,tl+1);tbs();tbP(PSTR("SCORE"));textO(tb,x0,38);textS2(sc,x0+24,35);}if(mt>30&&ab.justPressed(B_BUTTON)){mode=M_TITLE;HT=0;}break;
  }
  FX::display();}

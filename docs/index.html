@@ -1,12 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pocket Rocket</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-[hidden]{display:none!important}
 /* Layout: one handheld screen centred on a dark desk, the controls key underneath. Single dark look on purpose. */
 :root{
   --desk:#0f0d10; --bezel:#1e1a1f; --edge:#352e37; --ink:#e6e0e8; --dim:#958c99; --glow:#f2d27a;
@@ -26,6 +25,7 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(18px,3.6vw,26px);m
 .screen{position:relative;width:100%;max-width:100%;aspect-ratio:2/1;background:#000;border-radius:4px;overflow:hidden}
 #canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;outline:none}
 #canvas:focus-visible{box-shadow:0 0 0 2px var(--glow)}
+.load[hidden]{display:none}
 .load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);color:var(--dim);font-size:14px}
 /* on-screen gamepad under the screen: d-pad left, two buttons right, like the Arduboy */
 .pad{width:100%;max-width:820px;display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:6px;
@@ -50,7 +50,7 @@ kbd{font-family:var(--mono);font-size:12px;color:var(--ink);border:1px solid var
 
 <header>
   <h1>POCKET ROCKET</h1>
-  <span class="tag">Arduboy FX game by jaychugstein</span>
+  <span class="tag">Arduboy FX / FX-C · POOM game by jaychugstein</span>
 </header>
 
 <div class="bezel">
@@ -69,17 +69,16 @@ kbd{font-family:var(--mono);font-size:12px;color:var(--ink);border:1px solid var
     <button class="btn down" data-code="ArrowDown" data-key="ArrowDown" aria-label="Down">▼</button>
   </div>
   <div class="ab">
-    <button class="btn" data-code="KeyZ" data-key="z">CHUTE<small>B</small></button>
-    <button class="btn fire" data-code="KeyX" data-key="x">THRUST<small>A · hold</small></button>
+    <button class="btn" data-code="KeyZ" data-key="z">&#9679;<small>inner</small></button>
+    <button class="btn fire" data-code="KeyX" data-key="x">&#9679;<small>outer</small></button>
   </div>
 </div>
 
 <div class="keys">
-  <div><kbd>←</kbd><kbd>→</kbd> tilt the rocket</div>
-  <div><kbd>X</kbd> (A, outer button) hold to thrust · hold on the title to launch</div>
-  <div><kbd>Z</kbd> (B, inner button) parachute, with an empty tank above 100 m</div>
+  <div><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> arrows</div>
+  <div><kbd>Z</kbd> inner button &nbsp; <kbd>X</kbd> outer button</div>
 </div>
-<p class="note">This runs the real Arduboy FX game in an Arduboy emulator. Use the buttons under the screen, or the keyboard on a computer. Land slow and straight on the pad. Tap the screen once if you don't hear sound.</p>
+<p class="note">Fly the rocket from its launch pad and land it slow and straight in the middle of the landing pad. A is the outer button and B the inner one. On the title, hold A to launch. Hold A for thrust and feather it, the rocket is light on fuel; left and right tilt the rocket. Grab the blinking star on each level for bonus points. Out of fuel above 100 m? Press B to open the parachute. After landing, A goes to the next level and B shows how the landing was scored. Three rockets to get through all 100 levels in 10 worlds. Tap the screen once if you don't hear sound.</p>
 
 <script>
 var Module={canvas:document.getElementById('canvas')};
@@ -104,6 +103,7 @@ document.querySelectorAll('#pad .btn').forEach(function(b){
 function loadFile(name,data){var p=Module._malloc(data.length);Module.HEAPU8.set(data,p);Module.ccall('load_file','number',['string','string','number','number'],['file',name,p,data.length]);Module._free(p);}
 Module.onRuntimeInitialized=function(){
   try{Module.ccall('setparam','number',['string','string'],['v','200']);}catch(e){}   // full volume (the emulator starts at half)
+  try{Module.ccall('setparam','number',['string','string'],['c','0']);}catch(e){}     // no grey banding from the emulator's screen-brightness simulation
   Promise.all([fetch('game.hex',{cache:'no-store'}).then(function(r){return r.arrayBuffer();}).then(function(b){return ['game.hex',new Uint8Array(b)];}),
     fetch('fxdata.bin',{cache:'no-store'}).then(function(r){return r.arrayBuffer();}).then(function(b){return ['fxdata.bin',new Uint8Array(b)];})])
   .then(function(files){files.forEach(function(f){loadFile(f[0],f[1]);});document.getElementById('load').hidden=true;Module.canvas.focus();})
