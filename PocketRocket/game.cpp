@@ -338,6 +338,9 @@ enum{M_TITLE,M_HOWTO,M_INTRO,M_PLAY,M_OVER,M_WIN};
 static uint8_t mode=M_TITLE;static uint16_t mt,HT;static bool howSeen;static int32_t hi;
 #define EE_ADDR ((uint32_t*)32)
 static void saveHi(){if(score>hi){hi=score;eeprom_update_dword(EE_ADDR,hi^0x5A5A0000UL);}}
+// The launch screen's shake on each of the 89 SQ_HOLD frames (x in the low 4 bits, y in the high 4, both +8), the same
+// offsets export/screens.js used when it drew those frames, so the high score (drawn by the game) shakes in step.
+static const uint8_t HOLD_SHAKE[89] PROGMEM={137,136,136,135,135,136,137,137,136,136,137,135,136,137,136,136,135,136,136,136,136,136,136,136,137,135,136,135,137,136,135,136,137,136,135,121,137,150,151,136,134,136,134,151,134,152,136,118,136,118,138,151,120,153,120,153,121,153,152,137,153,136,153,136,153,135,135,119,136,135,150,122,135,149,134,134,118,137,152,154,136,138,121,136,136,123,120,120,137};
 static const uint24_t INTROS[10]={SQ_INTRO0,SQ_INTRO1,SQ_INTRO2,SQ_INTRO3,SQ_INTRO4,SQ_INTRO5,SQ_INTRO6,SQ_INTRO7,SQ_INTRO8,SQ_INTRO9};
 static void startLevel(uint8_t i){lvl=i;resetLevel();if(i%10==0){mode=M_INTRO;mt=0;}else mode=M_PLAY;aLock=true;}
 static uint32_t sp2(uint8_t b){uint32_t r=0;for(uint8_t i=0;i<5;i++)if(b&(1<<i))r|=3UL<<(2*i);return r;}
@@ -349,7 +352,8 @@ void loop(){if(!ab.nextFrame())return;ab.pollButtons();ft++;mt++;
   case M_TITLE:if(anyA)HT+=27;else HT=HT>80?HT-80:0;
    if(HT>=2400){HT=0;lives=3;score=0;if(!howSeen){mode=M_HOWTO;mt=0;}else startLevel(0);}
    if(HT)drawFrame(SQ_HOLD,HT/27);else drawFrame(SQ_IDLE,ft&63);
-   tbs();tbP(PSTR("HIGH SCORE "));tbn(hi);text(tb,5,37);break;
+   {int8_t sx=0,sy=0;if(HT){uint8_t o=pgm_read_byte(HOLD_SHAKE+HT/27);sx=(o&15)-8;sy=(o>>4)-8;}   // the high score shakes with the rest of the screen
+    tbs();tbP(PSTR("HIGH SCORE "));tbn(hi);text(tb,5+sx,37+sy);}break;
   case M_HOWTO:drawFrame(SQ_HOWTO,(mt>20&&!((mt>>4)&1))?1:0);if(mt>20&&jA){howSeen=true;startLevel(0);}break;
   case M_INTRO:drawFrame(INTROS[lvl/10],mt<60?mt/2:30+((mt-60)/2)%60);if(mt>14&&jA){mode=M_PLAY;aLock=true;ft=0;}break;
   case M_PLAY:
