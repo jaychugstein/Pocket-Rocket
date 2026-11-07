@@ -16,15 +16,16 @@ By **jaychugstein** · MIT License · Requires the FX flash chip (Arduboy FX / F
 
 ## Controls
 
-A is the outer button (labelled A on the POOM), B the inner one.
+The buttons are named as on the Arduboy: **B** is the outer (right) button, **A** the inner (left) one.
 
 | Button | Action |
 |---|---|
-| A (hold) | Thrust |
+| B (hold) | Thrust |
 | Left / Right | Tilt |
-| B | Parachute — only with an empty tank and above 100 m |
+| A | Parachute — only with an empty tank and above 100 m |
+| B / A | After landing: next level / how the landing was scored |
 
-Hold **A** on the title screen to launch. Land slow and straight on the pad.
+Hold **B** on the title screen to launch. Land slow and straight on the pad.
 
 ## Bonuses
 

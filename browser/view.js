@@ -425,7 +425,7 @@ function hud(){
  textO('L'+(lv.i+1),22,1,1);drawLives(44,1);
  const sc=String(score);textO(sc,128-sc.length*4,1,1);
  const at=altM()+'M';textO(at,1,20,1);
- if(state=='fly'){let t='';if(CH){const e=tick-CHT;if(e<90&&e%30<18)t='CHUTE OPEN'}else if(fuelL<=0&&R.y<0&&altM()>=100&&((ft>>3)&1))t='B:CHUTE';if(t)textO(t,Math.round(64-(t.length*4-1)/2),29,1)}
+ if(state=='fly'){let t='';if(CH){const e=tick-CHT;if(e<90&&e%30<18)t='CHUTE OPEN'}else if(fuelL<=0&&R.y<0&&altM()>=100&&((ft>>3)&1))t='A:CHUTE';if(t)textO(t,Math.round(64-(t.length*4-1)/2),29,1)}
 
 }
 
@@ -451,9 +451,9 @@ function render(){
    if(sT>(state=='crashed'?70:(res.perf||res.egg)?90:25)){const dt=state=='landed'&&detail,py=dt?2:12,ph=dt?60:40;fillR(24,py,80,ph,0);for(let x=24;x<104;x++){px(x,py);px(x,py+ph-1)}vl(24,py,ph);vl(103,py,ph);
    if(dt){const N=['LANDED','ACCURACY','SOFT LANDING','ANGLE','FUEL REMAINING','FLIGHT TIME','BONUS'];for(let k=0;k<7;k++){text(N[k],27,py+4+k*6);const s=String(res.parts[k]);text(s,98-s.length*4,py+4+k*6)}text('TOTAL',27,py+ph-8);const t=String(res.sc);text(t,98-t.length*4,py+ph-8)}
    else{if(!(state=='crashed'))ctext(state=='landed'&&lv.i==99?'YOU WIN!':res.msg,17);
-    if(state=='landed'){for(let k=0;k<5;k++)star5(44+k*10,29,k<res.stars);ctext(lv.i==99?'SCORE '+score:'+'+res.sc,36);ctext(lv.i==99?'A: TITLE':'A:NEXT B:INFO',44)}
-    else if(gameOver){ctext('GAME OVER',17);ctext('LEVEL '+(lv.i+1),26);ctext('SCORE '+score,34);ctext('A: TITLE',44)}
-    else{const ml=res.msg.split('|');if(ml.length>1){ctext(ml[0],15);ctext(ml[1],22)}else ctext(res.msg,17);ctext(lives+(lives==1?' LIFE':' LIVES')+' LEFT',ml.length>1?30:27);ctext('A: RETRY',39)}}}}
+    if(state=='landed'){for(let k=0;k<5;k++)star5(44+k*10,29,k<res.stars);ctext(lv.i==99?'SCORE '+score:'+'+res.sc,36);ctext(lv.i==99?'B: TITLE':'B:NEXT A:INFO',44)}
+    else if(gameOver){ctext('GAME OVER',17);ctext('LEVEL '+(lv.i+1),26);ctext('SCORE '+score,34);ctext('B: TITLE',44)}
+    else{const ml=res.msg.split('|');if(ml.length>1){ctext(ml[0],15);ctext(ml[1],22)}else ctext(res.msg,17);ctext(lives+(lives==1?' LIFE':' LIVES')+' LEFT',ml.length>1?30:27);ctext('B: RETRY',39)}}}}
  if(shake>0){const a=shake>10?2:1,sx=Math.round((rnd()-.5)*2*a),sy=Math.round((rnd()-.5)*2*a);TMP.set(SCR);SCR.fill(0);for(let y=0;y<64;y++)for(let x=0;x<128;x++){const xx=x-sx,yy=y-sy;if(xx>=0&&xx<128&&yy>=0&&yy<64&&TMP[yy*128+xx])SCR[y*128+x]=1}}
 }
 
@@ -504,7 +504,7 @@ function renderGameOver(){
  // title + score
  cfText('GAME OVER',Math.round(64-cfW('GAME OVER',2)/2),1,2);
  const ln='LEVEL '+(lv.i+1)+'  SCORE '+score;textO(ln,Math.round(64-(ln.length*4-1)/2),18,1);
- if(t>20&&((t>>4)&1)==0){const pa='A: TITLE';text(pa,Math.round(64-(pa.length*4-1)/2),58)}
+ if(t>20&&((t>>4)&1)==0){const pa='B: TITLE';text(pa,Math.round(64-(pa.length*4-1)/2),58)}
  if(t<4)for(let i=0;i<8192;i++)SCR[i]^=1;
 }
 let WINT=0;
@@ -523,7 +523,7 @@ function renderWin(){const t=WINT;SCR.fill(0);
  fillR(54,56,20,2,1);fillR(58,54,12,2,1);hl(60,54,8,0);
  const by=Math.round(48-Math.abs(Math.sin(t*0.08))*2);miniRk(62,by);
  for(let q=0;q<2+(t&3);q++)px(64+(q&1),by+6+q);
- if(t>20&&((t>>4)&1)==0){const pa='A: TITLE';textO(pa,94,58,1)}
+ if(t>20&&((t>>4)&1)==0){const pa='B: TITLE';textO(pa,94,58,1)}
 }
 let TITLE=true,BLK=0,HOWSEEN=0;
 function textS(s,x,y,sc,c){s=String(s);for(let i=0;i<s.length;i++){const g=FT[s[i]]||FT[' '];for(let r=0;r<5;r++)for(let q=0;q<3;q++)if(g[r*3+q]=='1')fillR(x+i*4*sc+q*sc,y+r*sc,sc,sc,c)}}
@@ -664,7 +664,7 @@ function renderIntro(){
  textO(wt,cx0(wt,1),4,1);
  const xt=Math.round(64-bigW(nm,3)/2),xs=-bigW(nm,3)-4;bigO(nm,Math.round(xs+(xt-xs)*es),13,3);
  if(t>34)textO(lt,cx0(lt,1),32,1);
- if(t>30&&((t>>4)&1)==0){const pa='PRESS A';textO(pa,cx0(pa,1),57,1)}
+ if(t>30&&((t>>4)&1)==0){const pa='PRESS B';textO(pa,cx0(pa,1),57,1)}
 }
 function renderTitle(){
  SCR.fill(0);
@@ -676,7 +676,7 @@ function renderTitle(){
   text('BONUS',70,2);
   const B=[['STAR',50],['360 SPIN',69],['BURN',25],['CHUTE',200]];
   for(let k=0;k<B.length;k++){text(B[k][0],70,10+k*7);const s=String(B[k][1]);text(s,125-s.length*4,10+k*7)}
-  text('3 LIVES',70,45);text('FOR ALL 100',70,51);text('A: PLAY',70,58);text('B: BACK',2,58);
+  text('3 LIVES',70,45);text('FOR ALL 100',70,51);text('B: PLAY',70,58);text('A: BACK',2,58);
   return}
  for(let k=0;k<44;k++){const x=(h8(k*7+3)*3+k*11)%128,y=(h8(k*13+8)*2+k*5)%52,p=(ft+k*53)%420;if(x<90&&y<54)continue;if(p<330)px(x,y);else if(p<372){px(x,y);if(k%3==0){px(x-1,y);px(x+1,y);px(x,y-1);px(x,y+1)}}}
  const ss=ft%420;if(ss<26){const sx=96+ss,sy=2+(ss>>1);for(let q=0;q<6;q++)px(sx-q,sy-(q>>1))}
@@ -703,7 +703,7 @@ PXO=SX;PYO=SY;
  textO('POCKET',5,4,2);
  cfText('ROCKET',4,18,2);
  text('HIGH SCORE '+HI,5,37);
- {const on=HT>0||((ft>>4)&1)==0;if(on)text('HOLD A TO LAUNCH',5,47);hl(5,54,64);hl(5,56,64);vl(5,54,3);vl(68,54,3);hl(6,55,Math.round(62*HT/240))}
+ {const on=HT>0||((ft>>4)&1)==0;if(on)text('HOLD B TO LAUNCH',5,47);hl(5,54,64);hl(5,56,64);vl(5,54,3);vl(68,54,3);hl(6,55,Math.round(62*HT/240))}
  PXO=0;PYO=0;
 }
 let DATA=null,CACHE={};
@@ -716,12 +716,12 @@ function blkScene(t){
  const ctr=(s,cx,yy)=>text(s,Math.round(cx-(s.length*4-1)/2),yy);
  ctr('HOW TO FLY',64,1);hl(4,8,120);
  const btn=(ch,cx,cy)=>{fcirc(cx,cy,5,1);const g=FT[ch];for(let r=0;r<5;r++)for(let c=0;c<3;c++)if(g[r*3+c]=='1')px(cx-1+c,cy-2+r,0)};
- btn('A',10,16);text('HOLD FOR THRUST',22,14);
+ btn('B',10,16);text('HOLD FOR THRUST',22,14);
  {const cx=10,cy=27;fillR(cx-1,cy-4,3,9,1);fillR(cx-4,cy-1,9,3,1);for(let i=0;i<3;i++){vl(cx-8+i,cy-i,1+2*i);vl(cx+8-i,cy-i,1+2*i)}}text('TILT LEFT / RIGHT',22,25);
- btn('B',10,38);text('PARACHUTE',22,34);text('NO FUEL + OVER 100M',22,40);
+ btn('A',10,38);text('PARACHUTE',22,34);text('NO FUEL + OVER 100M',22,40);
  hl(4,47,120);
  ctr('LAND SLOW + STRAIGHT ON PAD',64,50);
- if(t>20&&((t>>4)&1)==0)ctr('PRESS A',64,58);
+ if(t>20&&((t>>4)&1)==0)ctr('PRESS B',64,58);
 }
 function step(){
  poll();ft++;

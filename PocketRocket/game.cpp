@@ -274,7 +274,7 @@ static void drawLives(int16_t x,int16_t y){for(uint8_t k=0;k<3;k++)for(uint8_t r
  for(uint8_t k=0;k<3;k++)for(uint8_t r=0;r<6;r++){uint8_t row=pgm_read_byte(&LIFE[r]);for(uint8_t c=0;c<5;c++)if(row&(1<<c)){bool win=(r==2&&c==2);if(k<lives)px(x+k*8+c,y+r,win?0:1);else if(!win&&!((c+r)&1))px(x+k*8+c,y+r,1);}}}
 static void hud(){attitude();fuelBar();tbs();tbc('L');tbn(lvl+1);textO(tb,22,1);drawLivesF();
  tbs();tbn(score);textO(tb,128-tl*4,1);tbs();tbn(altM());tbc('M');textO(tb,1,20);
- if(state==ST_FLY){tbs();if(CH){uint16_t e=tick-CHT;if(e<90&&e%30<18)tbP(PSTR("CHUTE OPEN"));}else if(fuel<=0&&RY<0&&((ft>>3)&1)&&altM()>=100)tbP(PSTR("B:CHUTE"));if(tl)ctb(29,1);}}
+ if(state==ST_FLY){tbs();if(CH){uint16_t e=tick-CHT;if(e<90&&e%30<18)tbP(PSTR("CHUTE OPEN"));}else if(fuel<=0&&RY<0&&((ft>>3)&1)&&altM()>=100)tbP(PSTR("A:CHUTE"));if(tl)ctb(29,1);}}
 
 static const uint8_t STARC[7] PROGMEM={0x04,0x6C,0x3E,0x1F,0x3E,0x6C,0x04};
 static void drawStar(){if(L.sx==255||starGot)return;int16_t y=L.sy+((isin((tick*4)/5+L.sph)*3+256)>>9);int16_t x=L.sx;
@@ -316,9 +316,9 @@ static void render(){drawBg();
   if(dt){static const char N0[] PROGMEM="LANDED";static const char N1[] PROGMEM="ACCURACY";static const char N2[] PROGMEM="SOFT LANDING";static const char N3[] PROGMEM="ANGLE";static const char N4[] PROGMEM="FUEL REMAINING";static const char N5[] PROGMEM="FLIGHT TIME";static const char N6[] PROGMEM="BONUS";
    static const char*const NN[] PROGMEM={N0,N1,N2,N3,N4,N5,N6};for(uint8_t k=0;k<7;k++){tbs();tbP((const char*)pgm_read_word(&NN[k]));text(tb,27,py+4+k*6);tbs();tbn(k<6?resParts[k]:bonus);text(tb,98-tl*4,py+4+k*6);}
    tbs();tbP(PSTR("TOTAL"));text(tb,27,py+ph-8);tbs();tbn(resSc);text(tb,98-tl*4,py+ph-8);}
-  else if(state==ST_LANDED){ctP(lvl==99?PSTR("YOU WIN!"):perf?PSTR("PERFECT LANDING"):PSTR("LANDED"),17,0);for(uint8_t k=0;k<5;k++)star5(44+k*10,29,k<stars);tbs();tbc('+');tbn(resSc);ctb(36,0);ctP(PSTR("A:NEXT B:INFO"),44,0);}
+  else if(state==ST_LANDED){ctP(lvl==99?PSTR("YOU WIN!"):perf?PSTR("PERFECT LANDING"):PSTR("LANDED"),17,0);for(uint8_t k=0;k<5;k++)star5(44+k*10,29,k<stars);tbs();tbc('+');tbn(resSc);ctb(36,0);ctP(PSTR("B:NEXT A:INFO"),44,0);}
   else{char m[40];FX::readDataBytes(FX_MSGS+cmI*40,(uint8_t*)m,40);char*l2=0;for(uint8_t i=0;m[i];i++)if(m[i]=='|'){m[i]=0;l2=m+i+1;}
-   if(l2){text(m,cx_(m),15);text(l2,cx_(l2),22);}else text(m,cx_(m),17);tbs();tbn(lives);tbP(lives==1?PSTR(" LIFE LEFT"):PSTR(" LIVES LEFT"));ctb(l2?30:27,0);ctP(PSTR("A: RETRY"),39,0);}}
+   if(l2){text(m,cx_(m),15);text(l2,cx_(l2),22);}else text(m,cx_(m),17);tbs();tbn(lives);tbP(lives==1?PSTR(" LIFE LEFT"):PSTR(" LIVES LEFT"));ctb(l2?30:27,0);ctP(PSTR("B: RETRY"),39,0);}}
  {uint16_t e=tick-CHT;if(CH&&e<16&&!shake){int8_t a=e<8?2:1;int8_t sx=rndS(a),sy=rndS(a);shakeBuf(sx,sy);}}
  if(shake){int8_t a=shake>10?2:1;int8_t sx=rndS(a),sy=rndS(a);
    shakeBuf(sx,sy);}

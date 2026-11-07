@@ -3,8 +3,8 @@
   "title": "Pocket Rocket",
   "description": "1-bit rocket lander. 100 levels across 10 cities and places. Land slow and straight on the pad, chase hidden bonuses.",
   "author": "jaychugstein",
-  "version": "1.0.0",
-  "date": "2026-10-17",
+  "version": "1.1.1",
+  "date": "2026-11-07",
   "genre": "Action",
   "license": "MIT",
   "binaries": [
